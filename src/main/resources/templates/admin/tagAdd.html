@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>标签</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(2)"></nav>
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:href="@{/admin/tagAdd}" class="teal item active">新增</a>
+            <a th:href="@{/admin/tagList}" class="teal item">列表</a>
+        </div>
+    </div>
+</div>
+<div class="m-padded-tb-large m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui negative  message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${message}"></p>
+        </div>
+        <form method="post" th:action="@{/admin/tagAdd/submit}" class="ui form">
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label  class="ui teal basic label">名称</label>
+                    <input type="text" name="name" placeholder="标签名称" th:value="${name}">
+                </div>
+            </div>
+            <div class="ui right aligned container">
+                <a th:href="@{/admin/tagAdd/back}" class="ui button">返回</a>
+                <input type="text" hidden name="id" th:value="${id}">
+                <button class="ui teal summit button">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>首页</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+    <!--导航-->
+    <!--thymeleaf模板布局，减少重复代码（例如导航栏 页脚）-->
+    <nav th:replace="blogFragments::navigation(0)"></nav>
+
+    <div class="m-padded-tb-large m-container m-padded-tb-large">
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <!--左边部分-->
+                <div class="ui eleven wide column">
+                    <!--头部-->
+                    <div class="ui attached segment">
+                        <div class="ui two column grid">
+                            <div class="left aligned column">
+                                <h3 class="ui teal header" a>推荐博客</h3>
+                            </div>
+                            <div class="right aligned column">
+                                共<h2 class="ui orange header m-inline-block" th:text="${pages.totalElements}"></h2>篇
+                            </div>
+                        </div>
+                    </div>
+                    <!--博客区-->
+                    <div th:replace="blogFragments::blogList"></div>
+                    <!--博客翻页-->
+                    <div th:replace="blogFragments::blogTurnPagesIndex"></div>
+                </div>
+
+                <!--右边部分-->
+                <div class="ui five wide column">
+                    <!--分类-->
+                    <div class="ui segment">
+                        <div class="ui segment secondary">
+                            <div class="ui two column grid">
+                                <div class="ui column red left aligned">
+                                    <i class="idea icon"></i>分类
+                                </div>
+                                <div class="ui column yellow right aligned">
+                                    <a th:href="@{/types}" class="ui black header">more</a><i class="angle double right icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment teal">
+                            <div class="ui fluid vertical menu">
+                                <a target="_blank" class="item"  th:each="type : ${types}">
+                                    <span th:text="${type.name}">分类名称</span>
+                                    <div class="ui label teal basic left pointing" th:text="${type.blogs.size()}">分类梳理</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--标签-->
+                    <div class="ui segment">
+                        <div class="ui segment secondary">
+                            <div class="ui two column grid">
+                                <div class="ui column red left aligned ">
+                                    <i class="tag icon"></i>标签
+                                </div>
+                                <div class="ui column yellow right aligned">
+                                    <a th:href="@{/tags}" class="ui black header">more</a><i class="angle double right icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui teal segment">
+                            <a class="ui teal basic left pointing label m-margin-tb-tiny" th:each="tag:${tags}">
+                                <span th:text="${tag.name}">标签名称</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!--最新推荐-->
+                    <div class="ui segment">
+                        <div class="ui segment secondary">
+                            <i class="bookmark icon"></i>最新推荐
+                        </div>
+                        <div class="ui segment attached" th:each="blogName:${blogTop}">
+                            <a th:href="@{/blog(blogId=${blogName.id})}" th:text="${blogName.title}">主席树</a>
+                        </div>
+                    </div>
+
+                    <h4 class="ui horizontal  divider header">敬请关注</h4>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/all.js}"></script>
+</body>
+</html>

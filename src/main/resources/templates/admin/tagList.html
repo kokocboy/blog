@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>标签</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(2)"></nav>
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:href="@{/admin/tagAdd}"  class="teal item">新增</a>
+            <a th:href="@{/admin/tagList}" class="teal item active">列表</a>
+        </div>
+    </div>
+</div>
+<div class="m-padded-tb-large m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${message}"></p>
+        </div>
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tag,content: ${tagPages.content}">
+                <td th:text="${tag.id}"></td>
+                <td th:text="${tag.name}"></td>
+                <td>
+                    <a th:href="@{/admin/tagEdit(id=${tag.id},name=${tag.name})}" class="ui mini teal basic button">编辑</a>
+                    <a th:href="@{/admin/tagDelete(id=${tag.id})}" class="ui mini red basic button">删除</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                    <a th:href="@{/admin/tagAdd}" class="ui floated mini" th:text="${tagPages.number+1}+'/'+${tagPages.totalPages}">新增</a>
+                    <div class="ui mini pagination menu" >
+                        <a th:href="@{/admin/tagList(page=${tagPages.number}-1)}"
+                           th:if="${tagPages.number}>0"
+                           class="item" >上一页</a>
+                        <a th:href="@{/admin/tagList(page=${tagPages.number}+1)}"
+                           th:if="${tagPages.number}+1<${tagPages.totalPages}"
+                           class="item" >下一页</a>
+                    </div>
+                    <a th:href="@{/admin/tagAdd}" class="ui teal  right floated basic mini button">新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>404</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+    <!--导航-->
+    <!--thymeleaf模板布局，减少重复代码（例如导航栏 页脚）-->
+    <nav th:replace="blogFragments::navigation(-1)"></nav>
+    <div class="ui container">
+        <div class="ui grid">
+            <div class="eleven wide column">
+                <div class="ui segment">
+                    <img th:src="@{/images/404.jpg}" class="ui rounded image" style="height: 500px">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/all.js}"></script>
+</body>
+</html>

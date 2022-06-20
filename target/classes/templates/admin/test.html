@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<form menthod="get" th:action="@{/admin/indexManager}" class="big">
+    <input type="checkbox" name="a" id="data">a
+    <input type="checkbox" name="b" id="data2">b
+    <button type="submit" onclick="checkbox()">提交</button>
+</form>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script>
+
+function checkbox() {
+    var vec=document.getElementsByTagName("input");
+        for(var i=0;i<vec.length;i++){
+           if(vec[i].type) {
+               vec[i].value="true";
+           }else{
+               vec[i].checked=true;
+               vec[i].value="false";
+           }
+        }
+}
+</script>
+</body>
+</html>

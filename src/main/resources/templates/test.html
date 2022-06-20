@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>练习</title>
+</head>
+<body>
+<br>
+<br>
+<br><br>
+<br>
+<br>
+<br><br>
+
+<button id="div">bat</button>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    $("#div").click(function(e){
+        var tem="<p>❤</p>";
+        var x=e.pageX;
+        var y=e.pageY;
+        $(this).append(tem);
+        $("p").css({
+            "z-index": 9999,
+            'position':'absolute',
+            'top':y-20,
+            'left':x,
+            'color':'red'
+        })
+        $("p").animate({
+            'top':y-300,
+            'opacity':0,
+            'fontSize':'50px',
+        },1000,function(){
+            $(this).empty()
+        })
+    });
+</script>
+</html>
+
+

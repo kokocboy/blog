@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>详情页</title>
+    <style>
+        .floatDiv{
+            position: fixed;
+            left: 0;
+            top: 80%;
+        }
+    </style>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::navigation(-1)"></nav>
+
+
+
+<!--中间内容-->
+<div>
+    <div class="ui container">
+        <!--头部-->
+        <div class="ui top attached segment">
+            <div class="ui link list horizontal ">
+                <div class="item"><img th:src="${blog.user.avatar}" class="ui avatar image"></div>
+                <div class="item"><div class="content "><a class="header" th:text="${blog.user.username}">作者名称</a></div></div>
+                <div class="item"><i class="calendar icon "></i><span th:text="${blog.updateTime}">用户加载日期</span></div>
+                <div class="item"><i class="eye icon "></i><span th:text="${blog.views}">访问次数</span></div>
+            </div>
+        </div>
+        <!-- 图片-->
+        <div class="ui attached segment">
+            <img th:src="${blog.firstPicture}" class="ui fluid rounded image">
+        </div>
+        <!--正文区域-->
+        <div class="ui  attached segment">
+            <div class="ui segment right aligned basic">
+                <div class="ui orange label" th:text="${blog.flag}">原创</div>
+            </div>
+            <h2 class="ui header center aligned" th:text="${blog.title}">博客标题</h2>
+            <!--                标签-->
+            <div th:utext="${blog.content}"></div>
+            <!--                赞赏-->
+            <div class="ui center aligned  basic segment ">
+                <p class="ui basic orange  circular button" id="appreciation">赞赏</p>
+            </div>
+        </div>
+        <!--                博客信息-->
+        <div class="ui attached positive message ">
+            <div class="ui  middle aligned grid">
+                <div class="ui eleven wide column">
+                    <ui class="list">
+                        <li>作者：<span th:text="${blog.user.username}">作者名称</span></li>
+                        <li>发表时间：<span th:text="${blog.updateTime}"></span></li>
+                        <li>版权声明：自由转载-非商用-非衍生-保持署名</li>
+                        <li>转载声明：如果是转载栈主转载的文章，请附上原文链接</li>
+                    </ui>
+                </div>
+                <div class="five wide column">
+                    <img  class="ui rounded bordered right floated image" style="width: 120px">
+                </div>
+            </div>
+        </div>
+        <!--                留言区域-->
+        <div class="ui bottom attached segment" th:if="${blog.commentabled}" id="messageTextarea">
+            <div class="ui teal segment">
+                <div class="ui comments">
+                    <h3 class="ui dividing header">Comments</h3>
+<!--                    每条评论each-->
+                    <div class="comment" th:each="comment:${comments}">
+                        <a class="avatar"><img th:src="${comment.avatar}"></a>
+                        <div class="content">
+                            <div class="author">
+                                <i th:text="${comment.nickname}"></i>
+                                <i class="ui green header" th:text="${comment.parentComment==null?'':'  @'+comment.parentComment.nickname}">test</i>
+                            </div>
+                            <div class="metadata"><span class="date" th:text="${#dates.format(comment.createtime,'yyyy-MM-dd HH:mm')}">日期</span></div>
+                            <div class="text" th:text="${comment.content}">内容</div>
+<!--                            onclick传递EL表达式 普通传递单引号 thymeleaf使用双方括号（气死人，找了半天结果是thymeleaf的问题，气死我了）-->
+                            <div class="actions"><a th:onclick="reply([[${comment.id}]],[[${comment.nickname}]])">回复</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui form">
+                <div class="field">
+                    <textarea name="content" placeholder="请输入评论信息..." id="replyMessage" cols="30" rows="10"></textarea>
+                </div>
+                <div class="ui field">
+                    <div class="ui three column grid">
+                        <div class="ui red column input">
+                            <i class="ui user icon"></i>
+                            <input  type="text" id="replyName" placeholder="姓名">
+                        </div>
+                        <div class="ui black column input">
+                            <i class="ui mail icon"></i>
+                            <input type="text" id="replyEmail" placeholder="邮箱">
+                        </div>
+                        <div class="ui blue column">
+                            <a class="ui teal button" id="public_btn"><i class="ui edit icon"></i>发布 </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</br></br>
+</br>
+</br>
+</br>
+
+<!--浮动标签-->
+    <div class="floatDiv ui vertical icon buttons ">
+        <button id="leaveComments" class="ui  teal button">留言</button>
+        <div id="toTop" class="ui icon button" ><i class="chevron up icon"></i></div>
+    </div>
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/all.js}"></script>
+<script>
+///留言验证功能
+function checkMessage() {
+    $('.ui.form').form({
+        fields: {
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论信息'
+                }
+                ]
+            },
+            replyName: {
+                identifier: 'replyName',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入你的姓名'
+                }]
+            },
+            replyEmail: {
+                identifier: 'replyEmail',
+                rules: [{
+                    type: 'email',
+                    prompt: '请填写正确的邮箱地址'
+                }]
+            }
+        }
+    });
+}
+///赞赏功能
+$('#appreciation').click(function () {
+    $('.ui.modal').modal('show');
+});
+///滑动到留言区域
+$("#leaveComments").click(function () {
+    console.log("滑动到留言区域");
+    $("html,body").animate({"scrollTop": $(document).height()},500);
+});
+///滑动到顶部
+$("#toTop").click(function () {
+    $("html,body").animate({"scrollTop": 0},500);
+});
+
+///点击回复触发
+function reply(commentId,nickName) {
+    $("#replyMessage").attr("placeholder","@"+nickName);///设置占位符信息
+    $("#replyMessage").focus();//获取光标
+    $("#replyId").attr("value",commentId);
+}
+
+///点击发布触发(jQuery动态创建表单，jQuery代码增加，这样写的目的为了html code没那么臃肿)
+$('#public_btn').click(function () {
+    checkMessage();
+
+    //创建form
+    var form=$("<form></form>");
+    //设置属性
+    form.attr("action","/commentSubmit");
+    form.attr("method","post");
+
+    ////遍历提交参数
+    var vec=["replyMessage","replyName","replyEmail","blogId","replyId"];
+    for(var it of vec){
+        var input=$("<input type='text' name='"+it+"'/>");
+        input.attr("value",$("#"+it).val());
+        form.append(input);
+    }
+
+    ///////////////下面不管
+    form.appendTo("body");
+    form.hide();
+    form.submit();
+
+
+});
+</script>
+<!--保存控制层传递的参数，对标签id命名和value赋值，用途：jQuery-->
+<input id="blogId" th:value="${blog.id}" type="hidden">
+<input id="replyId" type="hidden">
+
+<!--赞赏弹窗作用-->
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        感谢你的赞赏
+    </div>
+    <div class="image content">
+        <div class="ui medium image">
+            <img th:src="@{/images/WXPay.jpg}">
+        </div>
+        <div class="description">
+            <div class="ui header">有一个不情之请</div>
+            <p>如果你有什么疑问，欢迎留言，同时有什么需要指点的地方，也欢迎，自己才能不断做的更好。如果觉得不错的话，可以支持一下，一分也不嫌少哦。</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            继续努力
+        </div>
+        <div class="ui positive right labeled icon button">
+            已支付
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+</body>
+</html>

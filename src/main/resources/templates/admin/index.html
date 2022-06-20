@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>首页</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(-1)"></nav>
+<!--登录欢迎-->
+<div class="m-padded-tb-large m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui success large message">
+            <h3>Hi~</h3>
+            <p>欢迎登录</p>
+        </div>
+        <img src="https://picsum.photos/id/1000/1000/400" alt="" class="ui rounded bordered fluid image ">
+    </div>
+</div>
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+</body>
+</html>

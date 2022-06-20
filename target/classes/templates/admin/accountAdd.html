@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>账户管理</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(3)"></nav>
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:onclick=addUser([[${user.type}]],[[${user.id}]]) th:if="${user.type<=1}" class="teal item">新增</a>
+            <a th:href="@{/admin/accountList}" class="teal item">列表</a>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<div class="ui container">
+    <div class="ui items teal attached segment">
+        <form method="post" th:action="@{/admin/accountAdd}" class="ui form">
+            <input type="hidden" th:value="${formMessage!=null?formMessage.id:''}" name="formMessageId">
+            <div class="field">
+                <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" name="username" placeholder="用户名" th:value="${formMessage!=null?formMessage.username:''}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input type="password" name="password" placeholder="密码" th:value="${formMessage!=null?formMessage.password:''}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui left icon input">
+                    <i class="mail icon"></i>
+                    <input type="email" name="email" placeholder="邮箱" th:value="${formMessage!=null?formMessage.email:''}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui left labeled action input">
+                    <label  class="ui compact teal basic label">权限设定</label>
+                    <div class="ui fluid selection dropdown">
+                        <input type="hidden" name="permission" th:value="${formMessage!=null?formMessage.type:'2'}">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">普通用户</div>
+                        <div class="menu">
+                            <div class="ui orange header item" th:data-value="0" th:text="超级用户" th:if="${user.type<=0}" ></div>
+                            <div class="ui purple header item" th:data-value="1" th:text="高级用户" th:if="${user.type<=1}"></div>
+                            <div class="ui blue header item" th:data-value="2" th:text="普通用户"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="ui teal button">提交信息</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+    function addUser(permission,userId) {
+        if(permission>1){
+            console.log("权限不够");//强制输入url地址，后端有兜底策略
+            return;
+        }
+        //创建form
+        var form=$("<form></form>");
+        //设置属性
+        form.attr("action","/admin/accountAdd");
+        form.attr("method","get");
+
+        ////遍历提交参数
+        var input=$("<input type='text' name='userId'/>");
+        input.attr("value",userId);
+        form.append(input);
+
+        ///////////////下面不管
+        form.appendTo("body");
+        form.hide();
+        form.submit();
+
+    }
+</script>
+</body>
+</html>

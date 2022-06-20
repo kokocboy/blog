@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>账号管理</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(3)"></nav>
+
+
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:onclick=addUser([[${user.type}]],[[${user.id}]]) th:if="${user.type<=1}" class="teal item">新增</a>
+            <a th:href="@{/admin/accountList}" class="teal item">列表</a>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<div class="ui container">
+    <div class="ui items teal attached segment" th:each="ac:${account}">
+            <div class="item">
+                <div class="ui small image">
+                    <img class="ui avatar image" th:src="${ac.avatar}">
+                </div>
+                <div class="middle aligned content">
+                    <div class="ui header" th:text="${ac.username}" th:classappend="${ac.type==0?'orange':(ac.type==1?'purple':'blue')}">姓名</div>
+                    <div class="description">
+                        <p>email：<i th:text="${ac.email}"></i></p>
+                        <p>级别：<i th:text="${ac.type==0?'超级用户':(ac.type==1?'高级用户':'普通用户')}"></i></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui red right floated button" th:if="${user.type<=1}" th:onclick=deleteUser([[${ac.id}]],[[${user.id}]],[[${ac.type}]],[[${user.type}]])>
+                            删除
+                        </div>
+                        <div class="ui teal right floated button" th:if="${user.type==0}" th:onclick="editUser([[${ac.id}]],[[${user.id}]])">
+                            编辑
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+    function editUser(userId,adminId) {
+        //创建form
+        var form=$("<form></form>");
+        //设置属性
+        form.attr("action","/admin/accountEdit");
+        form.attr("method","get");
+
+        ////遍历提交参数
+        var input=$("<input type='text' name='userId'/>");
+        input.attr("value",userId);
+        form.append(input);
+        var input=$("<input type='text' name='adminId'/>");
+        input.attr("value",adminId);
+        form.append(input);
+
+        ///////////////下面不管
+        form.appendTo("body");
+        form.hide();
+        form.submit();
+    }
+
+    function addUser(permission,userId) {
+        if(permission>1){
+            console.log("权限不够");//强制输入url地址，后端有兜底策略
+            return;
+        }
+        //创建form
+        var form=$("<form></form>");
+        //设置属性
+        form.attr("action","/admin/accountAdd");
+        form.attr("method","get");
+
+
+        ///////////////下面不管
+        form.appendTo("body");
+        form.hide();
+        form.submit();
+
+    }
+
+    function deleteUser(userId,adminId,type,adminType) {
+        console.log("delete"+userId);
+        if(adminType>=type){
+            console.log("权限不够");
+            return ;
+        }
+        //创建form
+        var form=$("<form></form>");
+        //设置属性
+        form.attr("action","/admin/accountDelete");
+        form.attr("method","post");
+
+        ////遍历提交参数
+        var input=$("<input type='text' name='userId'/>");
+        input.attr("value",userId);
+        form.append(input);
+        var input=$("<input type='text' name='adminId'/>");
+        input.attr("value",adminId);
+        form.append(input);
+
+        ///////////////下面不管
+        form.appendTo("body");
+        form.hide();
+        form.submit();
+    };
+
+</script>
+</body>
+</html>

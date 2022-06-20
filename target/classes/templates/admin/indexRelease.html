@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+<!--    <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">//静态访问-->
+<!--    动态访问-->
+    <link rel="stylesheet" href="/lib/editormd/css/editormd.min.css">
+    <title>首页</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(0)"></nav>
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:href="@{/admin/indexRelease}" class="teal item active">发布</a>
+            <a th:href="@{/admin/indexManager}" class="teal item">管理</a>
+        </div>
+    </div>
+</div>
+</br>
+<div class="m-padded-tb-large m-container m-padded-tb-big">
+    <div class="ui container">
+        <form id="blog-form" method="post" th:action="@{/admin/blogSubmit}" class="ui form">
+            <input type="hidden" name="blogId" th:value="${blog!=null?blog.id:''}">
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <div class="ui selection compact teal basic dropdown label">
+                        <input type="hidden" value="原创" name="flag" th:value="${blog!=null?blog.flag:''}">
+                        <i class="ui dropdown icon"></i>
+                        <div class="ui text">原创</div>
+                        <div class="ui menu">
+                            <div class="ui item" data-value="原创">原创</div>
+                            <div class="ui item" data-value="转载">转载</div>
+                            <div class="ui item" data-value="翻译">翻译</div>
+                        </div>
+                    </div>
+                    <input type="text" name="title" placeholder="标题" th:value="${blog!=null?blog.title:''}">
+                </div>
+            </div>
+            <div class="required field">
+                <div id="md-content" style="z-index: 1 !important;">
+                    <textarea name="content" placeholder="博客内容" style="display: none" th:text="${blog!=null?blog.content:''}"></textarea>
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="required field">
+                    <div class="ui left labeled action input">
+                        <label  class="ui compact teal basic label">分类</label>
+                        <div class="ui fluid selection dropdown">
+                            <input type="hidden" name="typeId" th:value="${blog!=null?blog.type.id:''}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">分类</div>
+                            <div class="menu">
+                                <div th:each="type : ${types}" class="item" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label  class="ui compact teal basic label">标签</label>
+                        <div class="ui fluid multiple search selection dropdown">
+                            <input type="hidden" name="tagIds" th:value="${blog!=null?blog.tagIds:''}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">标签</div>
+                            <div class="menu">
+                                <div th:each="tag : ${tags}" class="item" th:data-value="${tag.id}" th:text="${tag.name}">java</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="required field">
+                <textarea name="description" th:text="${blog!=null?blog.description:''}" placeholder="博客描述..." maxlength="200"></textarea>
+            </div>
+
+
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label  class="ui teal basic label">首图</label>
+                    <input type="text" name="firstPicture"   placeholder="首图引用地址" th:value="${blog!=null?blog.firstPicture:''}">
+                </div>
+            </div>
+            <div class="inline fields ">
+                <div class="field">
+                    <div class="ui checkbox ">
+                        <input type="checkbox" id="recommend" name="recommend" th:checked="${blog!=null?blog.recommend:''}" class="ui hidden">
+                        <label for="recommend" class="">推荐</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox ">
+                        <input type="checkbox" id="shareStatement"  name="shareStatement" th:checked="${blog!=null?blog.shareStatement:''}" class="ui hidden">
+                        <label for="shareStatement" class="">转载声明</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox ">
+                        <input type="checkbox" id="appreciation" name="appreciation" th:checked="${blog!=null?blog.appreciation:''}" class="ui hidden" >
+                        <label for="appreciation" class="">赞赏</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox ">
+                        <input type="checkbox" id="commentabled" th:checked="${blog!=null?blog.commentabled:''}" name="commentabled" class="ui hidden">
+                        <label for="commentabled" class="">评论</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui error message"></div>
+            <div class="ui right aligned container">
+                <a class="ui button" th:href="@{/admin/blogBack}">返回</a>
+                <input type="hidden" name="published">
+                <button class="ui secondary button" id="button_save">保存</button>
+                <button class="ui teal button submit" id="button_public">发布</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!--<script src="../../static/lib/editormd/editormd.min.js"></script>//静态访问-->
+<script src="/lib/editormd/editormd.min.js"></script>//动态访问
+<script>
+    //------------------------------------start
+    function checkContent() {
+        $('.ui.form').form({
+            fields : {
+                title : {
+                    identifier: 'title',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入博客标题'
+                    }]
+                },
+                content : {
+                    identifier: 'content',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入博客内容'
+                    }]
+                },
+                typeId : {
+                    identifier: 'typeId',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请选择分类'
+                    }]
+                },
+                tagIds : {
+                    identifier: 'tagIds',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请选择标签'
+                    }]
+                },
+                description : {
+                    identifier: 'description',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入博客描述'
+                    }]
+                },
+                firstPicture : {
+                    identifier: 'firstPicture',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入首图引用地址'
+                    },{
+                        type : 'url',
+                        prompt: '请输入合法的首图引用地址'
+                    }]
+                }
+            }
+        });
+    };
+    //------------------------------------end
+
+    //------------------------------------start
+    //引入markdown的插件
+    var contentEditor;
+    $(function() {
+        contentEditor = editormd("md-content", {
+            width   : "100%",
+            height  : 400,
+            syncScrolling : "single",
+           // path    : "../../static/lib/editormd/lib/"//静态访问
+            path    : "/lib/editormd/lib/"
+        });
+    });
+    //------------------------------------end
+
+
+    $('.ui.dropdown').dropdown();
+
+
+    //------------------------------------start
+    //处理（发布 保存）逻辑
+    $("#button_save").click(function (){
+        checkContent();
+        $("[name='published']").attr("value",false);
+    });
+    $('#button_public').click(function () {
+        checkContent();
+        $("[name='published']").attr("value",true);
+    });
+    $(document).ready(function () {
+        /*
+        新博客新发布：EL表达式判断，会传空的参数，导致checked全部选中
+        checked(bool)
+            选中(true) 未选中(false)
+        value(string)传递（checked=true 才会传递,默认为"on",推荐改为"tru" "false"）
+         */
+        var vec=document.getElementsByTagName("input");
+        for(var i=0;i<vec.length;i++){
+            if(vec[i].type!="checkbox"){
+                continue;
+            }
+            if($("[name='blogId']").val()==""){//新博客新发布
+                vec[i].checked=false;
+            }
+        }
+    });
+    $('#button_public').click(function () {///发布checkbox
+        var vec=document.getElementsByTagName("input");
+        for(var i=0;i<vec.length;i++){
+            if(vec[i].type!="checkbox"){
+                continue;
+            }
+            vec[i].value=(vec[i].checked?"true":"false");
+            vec[i].checked=true;
+        }
+    });
+    $('#button_save').click(function () {//保存checkbox
+        var vec=document.getElementsByTagName("input");
+        for(var i=0;i<vec.length;i++){
+            if(vec[i].type!="checkbox"){
+                continue;
+            }
+            vec[i].value=(vec[i].checked?"true":"false");
+            vec[i].checked=true;
+        }
+    });
+    ///------------------------------------end
+</script>
+</body>
+</html>

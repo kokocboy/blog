@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>搜索结果</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::navigation(-1)"></nav>
+
+
+<div class="m-padded-tb-large m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!--            头部-->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column"><h3 class="ui teal header" a>搜索结果</h3></div>
+                <div class="right aligned column">共<h3 class="ui orange header m-inline-block " th:text="${pages.totalElements}">文章数量</h3>个</div>
+            </div>
+        </div>
+        <!--        列表-->
+        <div class="ui teal attached m-margin-top segment">
+            <div class="ui padded vertical segment m-padded-tb-large" >
+                <!--                博客展示-->
+                <div th:replace="blogFragments::blogList"></div>
+            </div>
+        </div>
+        <div th:replace="blogFragments::blogTurnPagesSearch"></div>
+    </div>
+</div>
+
+
+
+
+
+</div>
+<div class="footerPos">
+<!--底部-->
+<footer th:replace="blogFragments::blogFooter" ></footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script th:src="@{/js/all.js}"></script>
+</body>
+</html>

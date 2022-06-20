@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>首页</title>
+</head>
+<body class="bg">
+<div class="footerUp">
+<!--导航-->
+<nav th:replace="blogFragments::adminNavigation(0)"></nav>
+<!--中部内容-->
+<div class="ui attached pointing  menu">
+    <div class="ui container">
+        <div class="right menu red">
+            <a th:href="@{/admin/indexRelease}" class="teal item">发布</a>
+            <a th:href="@{/admin/indexManager}" class="teal item active">管理</a>
+        </div>
+    </div>
+</div>
+<div class="m-padded-tb-large m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <form  class="ui secondary segment form" th:action="@{/admin/indexManager}" method="get">
+            <!--分类传值问题-->
+            <input type="text" hidden th:value="${callBackTypeId}" name="callBackTypeId" >
+
+            <div class="inline fields">
+                <div class="field">
+                    <input type="text" name="title" placeholder="标题" th:value="${callBackTitle}" >
+                </div>
+                <div class="field">
+                    <div class="ui labeled action input">
+                        <div class="ui type selection dropdown">
+                            <input type="hidden" name="typeId" th:value="${callBackTypeId}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">分类</div>
+                            <div class="menu">
+                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}"></div>
+                            </div>
+                        </div>
+                        <a class="ui compact button" th:href="@{/admin/indexManager}" onclick="clear()">clear</a>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui teal basic mini button"><i class="ui search icon"></i>搜索</button>
+                </div>
+            </div>
+        </form>
+        <div id="table-container">
+            <table class="ui compact teal table" >
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>标题</th>
+                    <th>类型</th>
+                    <th>推荐</th>
+                    <th>状态</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="blog,content: ${blogPages.content}">
+                    <td th:text="${blog.id}"></td>
+                    <td th:text="${blog.title}"></td>
+                    <td th:text="${blog.type.name}"></td>
+                    <td th:text="${blog.recommend} ? '是':'否'"></td>
+                    <td th:text="${blog.published} ? '发布':'草稿'"></td>
+                    <td th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd hh:mm')}"></td>
+                    <td>
+                        <a  th:href="@{/admin/blogEdit(id=${blog.id})}" class="ui mini teal basic button">编辑</a>
+                        <a  th:href="@{/admin/blogDelete(id=${blog.id})}" class="ui mini red basic button">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="7">
+                        <a th:href="@{/admin/indexRelease}" class="ui floated mini" th:text="${blogPages.number+1}+'/'+${blogPages.totalPages}">新增</a>
+                        <div class="ui mini pagination menu" >
+                            <a th:href="@{/admin/indexManager(page=${blogPages.number}-1,callBackTypeId=${callBackTypeId},typeId=${typeId})}"
+                               th:if="${blogPages.number}>0"
+                               class="item" >上一页</a>
+                            <a th:href="@{/admin/indexManager(page=${blogPages.number}+1,callBackTypeId=${callBackTypeId},typeId=${typeId})}"
+                               th:if="${blogPages.number}+1<${blogPages.totalPages}"
+                               class="item" >下一页</a>
+                        </div>
+                        <a th:href="@{/admin/indexRelease}" class="ui teal  right floated basic mini button">新增</a>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div class="footerPos">
+    <!--底部-->
+    <footer th:replace="blogFragments::blogFooter"></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown').dropdown();
+    $('#clear-btn')
+        .on('click', function() {
+            $('.ui.type.dropdown')
+                .dropdown('clear')
+            ;
+        })
+    ;
+</script>
+</body>
+</html>

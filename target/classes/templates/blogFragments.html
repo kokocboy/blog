@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>模板</title>
+</head>
+<body>
+<!--用户界面-->
+<nav class="ui inverted segment" th:fragment="navigation(n)">
+    <div class="ui container">
+        <div class="ui inverted menu">
+            <h1 class="ui teal header item">Blog</h1>
+            <a href="#" th:href="@{/}" class="item" th:classappend="${n==0} ? 'active'"><i class="home icon"></i>首页</a>
+            <a href="#" th:href="@{/types}" class="item" th:classappend="${n==1} ? 'active'"><i class="idea  icon"></i>分类</a>
+            <a href="#" th:href="@{/tags}" class="item" th:classappend="${n==2} ? 'active'"><i class="tags icon"></i>标签</a>
+            <a href="#" th:href="@{/archives}" class="item" th:classappend="${n==3} ? 'active'"><i class="clone icon"></i>归档</a>
+            <a href="#" th:href="@{/about}" class="item" th:classappend="${n==4} ? 'active'"><i class="info  icon"></i>关于我</a>
+            <div class="right item">
+                <div class="ui icon input inverted">
+                    <input type="text" placeholder="Search.." id="searchName">
+                    <i class="search link icon" id="search"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--后端管理-->
+<nav class="ui inverted segment" th:fragment="adminNavigation(n)">
+    <div class="ui container">
+        <div class="ui inverted menu">
+            <h1 class="ui teal header item">后台管理</h1>
+            <a href="#" th:href="@{/admin/indexManager}" class="item" th:classappend="${n==0} ? 'active'"><i class="home icon"></i>首页</a>
+            <a href="#" th:href="@{/admin/typeList}" class="item" th:classappend="${n==1} ? 'active'"><i class="tags icon"></i>分类</a>
+            <a href="#" th:href="@{/admin/tagList}" class="item" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>标签</a>
+            <a href="#" th:href="@{/admin/accountList}" class="item" th:classappend="${n==3} ? 'active'"><i class="user icon"></i>账户管理</a>
+            <div class="ui right inverted menu">
+                <div class="ui dropdown  item blue">
+                    <div class="text">
+                        <img class="ui avatar image" src="https://picsum.photos/id/1000/100/100"><i class="ui teal header" th:text="${user.username}"></i>
+                    </div>
+                    <i class="ui dropdown icon"></i>
+                    <div class="menu">
+                        <a th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--底部-->
+<footer class="ui inverted vertical segment" th:fragment="blogFooter">
+    <div class="ui center aligned container">
+        <div class="ui  inverted divided grid">
+            <div class="five wide column">
+                <h4>Blog网站信息</h4>
+                <p>文章总数： <i class="ui orange header" th:text="${footerInfo[0]}"></i> 篇</p>
+                <p>留言总数： <i class="ui orange header" th:text="${footerInfo[1]}"></i> 次</p>
+                <p>访问总数： <i class="ui orange header" th:text="${footerInfo[2]}"></i> 条</p>
+            </div>
+            <div class="five wide column">
+                <h4>联系我</h4>
+                <p class="item">WeChat：15390154303</p>
+                <p class="item">邮箱：1072303326@qq.com</p>
+            </div>
+            <div class="five wide column ">
+                <h4>特别</h4>
+                <p>撸起袖子加油干</p>
+                <p>努力总会有回报的</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p>蜀ICP备2021031766号-1</p>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--博客列表展示-->
+<div class="ui attached segment" th:each="blog,content: ${pages.content}" th:fragment="blogList">
+    <div class="ui padded vertical segment m-padded-tb-large">
+        <div class="ui middle aligned stackable grid" >
+            <div class="eleven wide column">
+                <h class="ui header"><a class="m-black" th:text="${blog.title}" th:href="@{/blog(blogId=${blog.id})}">每篇博客的标题</a></h>
+                <p th:text="${blog.description}"></p>
+                <div class="ui grid ">
+                    <div class="ui eleven wide column">
+                        <div class="ui link list horizontal mini">
+                            <div class="item">
+                                <img th:src="${blog.user.avatar}" class="ui avatar image">
+                                <div class="content "><a href="#" class="header" th:text="${blog.user.username}">用户名称</a></div>
+                            </div>
+                            <div class="item">
+                                <i class="calendar icon "></i><span th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}">更新时间</span>
+                            </div>
+                            <div class="item">
+                                <i class="eye icon "></i> <span th:text="${blog.views}">点击次数</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui five wide column right aligned">
+                        <a href="#" class="ui label teal basic" th:text="${blog.type.name}">分类名称</a>
+                    </div>
+                </div>
+            </div>
+            <div class="five wide column">
+                <a href="#">
+                    <img th:src="${blog.firstPicture}" class="ui rounded image">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--上一下 下一页-->
+<!--首页-->
+<div class="ui attached segment"  th:fragment="blogTurnPagesIndex">
+    <div class="ui two column grid">
+        <div class="ui column left aligned">
+            <a th:href="@{/(page=${pages.number}-1)}"
+               th:if="${pages.number}>0"
+               class="ui mini teal basic button" >上一页</a>
+        </div>
+        <div class="ui column right aligned">
+            <a th:href="@{/(page=${pages.number}+1)}"
+               th:if="${pages.number}+1<${pages.totalPages}"
+               class="ui mini teal basic button" >下一页</a>
+        </div>
+    </div>
+</div>
+<!--分类-->
+<div class="ui attached segment"  th:fragment="blogTurnPagesType">
+    <div class="ui two column grid">
+        <div class="ui column left aligned">
+            <a th:href="@{/types(page=${pages.number}-1)}"
+               th:if="${pages.number}>0"
+               class="ui mini teal basic button" >上一页</a>
+        </div>
+        <div class="ui column right aligned">
+            <a th:href="@{/types(page=${pages.number}+1)}"
+               th:if="${pages.number}+1<${pages.totalPages}"
+               class="ui mini teal basic button" >下一页</a>
+        </div>
+    </div>
+</div>
+<!--标签-->
+<div class="ui attached segment"  th:fragment="blogTurnPagesTag">
+    <div class="ui two column grid">
+        <div class="ui column left aligned">
+            <a th:href="@{/tags(page=${pages.number}-1)}"
+               th:if="${pages.number}>0"
+               class="ui mini teal basic button" >上一页</a>
+        </div>
+        <div class="ui column right aligned">
+            <a th:href="@{/tags(page=${pages.number}+1)}"
+               th:if="${pages.number}+1<${pages.totalPages}"
+               class="ui mini teal basic button" >下一页</a>
+        </div>
+    </div>
+</div>
+<!--搜索-->
+<div class="ui attached segment"  th:fragment="blogTurnPagesSearch">
+    <div class="ui two column grid">
+        <div class="ui column left aligned">
+            <a th:href="@{/search(page=${pages.number}-1)}"
+               th:if="${pages.number}>0"
+               class="ui mini teal basic button" >上一页</a>
+        </div>
+        <div class="ui column right aligned">
+            <a th:href="@{/search(page=${pages.number}+1)}"
+               th:if="${pages.number}+1<${pages.totalPages}"
+               class="ui mini teal basic button" >下一页</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</script>
+</html>

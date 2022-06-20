@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport",content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../../../../blog/static/css/oneself.css" th:href="@{/css/oneself.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>账号确认</title>
+</head>
+<body>
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ui container">
+        <div class="column">
+            <form class="ui large form" method="post" th:action="@{/admin/accountReplyPage}">
+                <div class="ui card">
+                    <div class="content">
+                        <h2 class="ui red inverted header">个人博客系统</h2>
+                        <div class="meta">管理员：<span th:text="${username}"></span>
+                        </div>
+                        <div class="description">
+                            管理员正在为你创建账号，需要你点击确认，是非本人意愿，请忽略此邮件。有效时间为10分钟。
+                        </div>
+                    </div>
+                    <input  th:value="${userId}" name="userId" type="hidden">
+                    <button class="ui fluid large teal submit button" type="submit">确认</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>
